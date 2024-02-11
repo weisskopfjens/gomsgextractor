@@ -7,8 +7,12 @@
 package docstract
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"os"
+	"path/filepath"
+	"strconv"
 	"strings"
 	"unicode"
 
@@ -32,7 +36,48 @@ func (d *DocStract) SaveFile(path string) error {
 		return errors.New("document does not have a filename cannot save")
 	}
 
-	return os.WriteFile(path+*(d.FileName), d.Bytes[((len(*(d.FileName))+2)*2):], 0644)
+	startdata := ((len(*(d.FileName)) + 2) * 2)
+	m := []byte(d.spreadString(d.Mime))
+	e := []byte(d.spreadString(filepath.Ext(*d.FileName)))
+	f := []byte(d.spreadString(*d.FileName))
+	t := d.Bytes
+
+	fmt.Println(string(m))
+	fmt.Println(string(e))
+	fmt.Println(string(f))
+
+	p1 := bytes.LastIndex(t, m)
+	if p1 == -1 {
+		return errors.New("Mime not found at end of data.")
+	}
+	p2 := p1 - len(f) - len(e)
+	enddata := bytes.LastIndex(t[:p2], e)
+	if enddata == -1 {
+		return errors.New("Ext not found at end of data.")
+	}
+
+	_, err := os.Stat(path + *(d.FileName))
+	if os.IsNotExist(err) {
+		return os.WriteFile(path+*(d.FileName), d.Bytes[startdata:enddata], 0644)
+	}
+
+	for i := 1; true; i++ {
+		istr := strconv.Itoa(i)
+		_, err := os.Stat(path + istr + "_" + *d.FileName)
+		if os.IsNotExist(err) {
+			return os.WriteFile(path+istr+"_"+*d.FileName, d.Bytes[startdata:], 0644)
+		}
+	}
+	return fmt.Errorf("impossible error")
+}
+
+func (d *DocStract) spreadString(str string) string {
+	var o []rune
+	for _, v := range str {
+		o = append(o, v)
+		o = append(o, 0)
+	}
+	return string(o)
 }
 
 func (d *DocStract) removeInvisibleChars(str string) string {
@@ -41,6 +86,17 @@ func (d *DocStract) removeInvisibleChars(str string) string {
 			return r
 		}
 		return -1
+	}, str)
+	return clean
+}
+
+// exchangeInvisibleChars make from a invisible char a visible _
+func (d *DocStract) exchangeInvisibleChars(str string) string {
+	clean := strings.Map(func(r rune) rune {
+		if unicode.IsPrint(r) {
+			return r
+		}
+		return ' '
 	}, str)
 	return clean
 }
