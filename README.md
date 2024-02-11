@@ -15,3 +15,7 @@ Usage of ./gomsgextractor:
   -out string
         Specify a custom output directory.
 ```
+
+## Todo
+- Write unit tests
+- Extract from multiple files
