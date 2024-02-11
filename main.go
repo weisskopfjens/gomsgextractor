@@ -36,6 +36,9 @@ func main() {
 	fmt.Println("Found ", count, " attached files.")
 
 	for _, document := range *files {
+		if document.FileName == nil {
+			continue
+		}
 		if err := document.SaveFile(outputdir); err != nil {
 			log.Fatalln(err)
 		} else {
