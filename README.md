@@ -10,12 +10,7 @@ github.com/richardlehane/mscfb
 
 ## Usage
 ```
-(*) are required parameter.
-Usage of ./gomsgextractor:
-  -file string
-        (*) A .msg file
-  -out string
-        Specify a custom output directory.
+Usage: gomsgextractor <msg-file> <output-dir>
 ```
 
 ## Todo
