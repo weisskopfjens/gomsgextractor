@@ -8,6 +8,12 @@ The old version use parts of github.com/JacThomp/docstract. Now it was removed f
 ## Dependencies
 github.com/richardlehane/mscfb
 
+## Build
+For linux binaries you can use the ```./build.sh``` script.
+
+Alternatively:
+In the cmd directory type ```go build -o gomsgextractor```
+
 ## Usage
 ```
 Usage: gomsgextractor <msg-file> <output-dir>
