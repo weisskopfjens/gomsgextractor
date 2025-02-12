@@ -1,7 +1,9 @@
 # goMSGExtractor
-With this command line tool an a golang package you can extract attachements from Microsoft Outlook .msg files.
+With this command line tool you can extract attachments from microsoft outlook .msg files.
 
-This tool use parts of github.com/JacThomp/docstract. I do some changes an extend the code.
+I completely rewrite the code. Now it uses the "github.com/richardlehane/mscfb" package.
+
+The old version use parts of github.com/JacThomp/docstract. Now it was removed from this project.
 
 ## Dependencies
 github.com/richardlehane/mscfb
